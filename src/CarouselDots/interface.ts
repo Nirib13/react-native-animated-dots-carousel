@@ -5,6 +5,7 @@ export interface DotConfig {
   margin: number;
   borderWidth?: number;
   borderColor?: string;
+  marginVertical?: number;
 }
 export interface DecreasingDot {
   quantity: number;

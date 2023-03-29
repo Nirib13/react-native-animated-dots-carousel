@@ -1,6 +1,6 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, { useEffect, useRef, useState } from 'react';
-import { Animated } from 'react-native';
+import { Animated, TouchableOpacity } from 'react-native';
 
 import usePrevious from '../use-previous';
 
@@ -18,6 +18,7 @@ interface Dot {
   carouselState: CarouselState;
   verticalOrientation: boolean;
   interpolateOpacityAndColor: boolean;
+  onPress?: (val: number) => void;
 }
 
 const Dot = ({
@@ -29,6 +30,7 @@ const Dot = ({
   carouselState,
   verticalOrientation,
   interpolateOpacityAndColor,
+  onPress,
 }: Dot): JSX.Element => {
   const { currentIndex, state } = carouselState;
   const [type, setType] = useState(
@@ -82,33 +84,42 @@ const Dot = ({
   });
 
   return (
-    <Animated.View
-      style={[
-        {
-          backgroundColor: interpolateOpacityAndColor
-            ? animatedValue.current.interpolate({
-                inputRange: [0, 1],
-                outputRange: [prevType.color, type.color],
-              })
-            : type.color,
-          borderColor: type.borderColor,
-          borderRadius: type.size,
-          borderWidth: type.borderWidth,
-          marginHorizontal: verticalOrientation ? 0 : type.margin,
-          marginVertical: verticalOrientation ? type.margin : 0,
-          opacity: interpolateOpacityAndColor
-            ? animatedValue.current.interpolate({
-                inputRange: [0, 1],
-                outputRange: [prevType.opacity, type.opacity],
-              })
-            : type.opacity,
-        },
-        {
-          height: size,
-          width: size,
-        },
-      ]}
-    />
+    <TouchableOpacity
+      disabled={!onPress}
+      onPress={() => onPress && onPress(index)}
+    >
+      <Animated.View
+        style={[
+          {
+            backgroundColor: interpolateOpacityAndColor
+              ? animatedValue.current.interpolate({
+                  inputRange: [0, 1],
+                  outputRange: [prevType.color, type.color],
+                })
+              : type.color,
+            borderColor: type.borderColor,
+            borderRadius: type.size,
+            borderWidth: type.borderWidth,
+            marginHorizontal: verticalOrientation ? 0 : type.margin,
+            marginVertical: verticalOrientation
+              ? type.margin
+              : type.marginVertical
+              ? type.marginVertical
+              : 0,
+            opacity: interpolateOpacityAndColor
+              ? animatedValue.current.interpolate({
+                  inputRange: [0, 1],
+                  outputRange: [prevType.opacity, type.opacity],
+                })
+              : type.opacity,
+          },
+          {
+            height: size,
+            width: size,
+          },
+        ]}
+      />
+    </TouchableOpacity>
   );
 };
 

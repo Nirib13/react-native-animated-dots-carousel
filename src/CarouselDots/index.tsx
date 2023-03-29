@@ -18,6 +18,8 @@ export interface CarouselDotsProps {
   decreasingDots: DecreasingDot[];
   verticalOrientation?: boolean;
   interpolateOpacityAndColor?: boolean;
+  onPress?: (val: number) => void;
+  scrollEnabled?: boolean
 }
 
 const calculateDotSize = (dot: DotConfig): number => dot.size + 2 * dot.margin;
@@ -69,6 +71,8 @@ const CarouselDots = ({
   decreasingDots,
   verticalOrientation = false,
   interpolateOpacityAndColor = true,
+  onPress,
+  scrollEnabled = false,
 }: CarouselDotsProps): JSX.Element => {
   const refScrollView = useRef<ScrollView>(null);
   const [curIndex, setCurIndex] = useState<number>(currentIndex);
@@ -142,6 +146,7 @@ const CarouselDots = ({
               decreasingDots={decreasingDots}
               carouselState={carouselState}
               interpolateOpacityAndColor={interpolateOpacityAndColor}
+              onPress={onPress}
             />
           );
         })}
@@ -166,7 +171,7 @@ const CarouselDots = ({
         contentContainerStyle={styles.scrollContainer}
         bounces={false}
         horizontal={!verticalOrientation}
-        scrollEnabled={false}
+        scrollEnabled={scrollEnabled}
         showsVerticalScrollIndicator={false}
         showsHorizontalScrollIndicator={false}
       >
@@ -186,6 +191,7 @@ const CarouselDots = ({
               verticalOrientation={verticalOrientation}
               carouselState={carouselState}
               interpolateOpacityAndColor={interpolateOpacityAndColor}
+              onPress={onPress}
             />
           );
         })}
